@@ -1,10 +1,17 @@
 LABEL authors="Nimmala Nithin Reddy"
 
 FROM maven:3.8.5-openjdk-17 AS build
-COPY . .
+
+WORKDIR /app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
-COPY --from=build /target/personal-finance-app-0.0.1-SNAPSHOT.jar app.jar
+WORKDIR /app
+COPY --from=build /app/target/personal-finance-app-0.0.1-SNAPSHOT.jar .
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/personal-finance-app-0.0.1-SNAPSHOT.jar"]
