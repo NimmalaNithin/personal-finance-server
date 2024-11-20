@@ -25,11 +25,11 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public User registerUser(User user) {
+    public String registerUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         user.setRoles(Collections.singleton(roleRepository.findByName("ROLE_USER")));
-        return userRepository.save(user);
+        return verifyUser(user);
     }
 
     @Override
