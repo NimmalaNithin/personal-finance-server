@@ -1,0 +1,4 @@
+package com.personalfinance.personal_finance_app.dto;
+
+public class AccountCreationResponse {
+}
