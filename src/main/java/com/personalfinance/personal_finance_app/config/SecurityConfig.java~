@@ -2,7 +2,6 @@ package com.personalfinance.personal_finance_app.config;
 
 import com.personalfinance.personal_finance_app.Filter.JwtFilter;
 import com.personalfinance.personal_finance_app.service.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,11 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
-@AllArgsConstructor
 public class SecurityConfig {
 
-    private CorsConfigurationSource corsConfigurationSource;
-
+    
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -45,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .cors(cors -> cors.configurationSource(CorsConfigurationSource))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
