@@ -31,9 +31,13 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isEmpty()) {
             return "User not found";
         }
+
         User user = optionalUser.get();
-        user.getRoles().clear();
-        userRepository.save(user);
+        if(!user.getRoles().isEmpty()){
+            user.getRoles().clear();
+            userRepository.save(user);
+        }
+
         userRepository.deleteById(id);
         return "User deleted - " + id;
     }

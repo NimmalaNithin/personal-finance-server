@@ -1,5 +1,8 @@
 package com.personalfinance.personal_finance_app.controller;
 
+import com.personalfinance.personal_finance_app.dto.TokenResponse;
+import com.personalfinance.personal_finance_app.dto.UserLoginRequest;
+import com.personalfinance.personal_finance_app.dto.UserRegisterRequest;
 import com.personalfinance.personal_finance_app.model.entity.User;
 import com.personalfinance.personal_finance_app.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -20,17 +23,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
-        String token = authService.verifyUser(user);
+    public ResponseEntity<TokenResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
+        String token = authService.verifyUser(userLoginRequest);
         if(token.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username or password");
+            throw new RuntimeException("Invalid Username or password");
         }
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        String token = authService.registerUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(token);
+    public ResponseEntity<TokenResponse> register(@RequestBody UserRegisterRequest userRegisterRequest) {
+        String token = authService.registerUser(userRegisterRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new TokenResponse(token));
     }
 }
