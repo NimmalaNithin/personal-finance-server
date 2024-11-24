@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 public class CurrentMonthFinancialSummaryResponse {
-    private UUID accountId;
+    private UUID userId;
     private BigDecimal totalAmount;
     private TransactionType type;
     private String monthYear;

@@ -21,41 +21,28 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     @Query("SELECT SUM(t.amount) " +
             "FROM Transaction t " +
-            "WHERE t.account.id = :accountId " +
+            "WHERE t.account.user.id = :userId " +
             "AND t.type = :type " +
             "AND t.transactionDate BETWEEN :startDate AND :endDate"
     )
-    BigDecimal findTotalAmountByAccountIdAndTypeAndTransactionDateBetween(
-            @Param("accountId") UUID accountId,
+    BigDecimal findTotalAmountByUserIdAndTypeAndTransactionDateBetween(
+            @Param("userId") UUID userId,
             @Param("type")TransactionType type,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
-//    @Query("SELECT new com.personalfinance.personal_finance_app.dto.MonthlyFinanceDetails(" +
-//            "MONTH(t.transactionDate), SUM(t.amount)" +
-//            ") " +
-//            "FROM Transaction t " +
-//            "WHERE t.account.id = :accountId " +
-//            "AND t.type = :type " +
-//            "GROUP BY FUNCTION('DATE_FORMAT', t.transactionDate, '%m-%Y')" +
-//            "ORDER BY FUNCTION('DATE_FORMAT', t.transactionDate, '%m-%Y') DESC")
-//@Query("SELECT new com.personalfinance.personal_finance_app.dto.MonthlyFinanceDetails(" +
-//        " t.type, SUM(t.amount)" +
-//        ") " +
-//        "FROM Transaction t " +
-//        "WHERE t.account.id = :accountId " +
-//        "AND t.type = :type group by t.type"
-//)
-@Query("SELECT new com.personalfinance.personal_finance_app.dto.MonthlyFinanceDetails(MONTH(t.transactionDate), SUM(t.amount)) " +
+
+@Query("SELECT " +
+        "new com.personalfinance.personal_finance_app.dto.MonthlyFinanceDetails(MONTH(t.transactionDate), SUM(t.amount)) " +
         "FROM Transaction t " +
-        "WHERE t.account.id = :accountId " +
+        "WHERE t.account.user.id = :userId " +
         "AND t.type = :type " +
         "AND YEAR(t.transactionDate) = YEAR(CURRENT_DATE())" +
         "GROUP BY YEAR(t.transactionDate), MONTH(t.transactionDate) " +
         "ORDER BY YEAR(t.transactionDate), MONTH(t.transactionDate) DESC"
 )
-    List<MonthlyFinanceDetails> findMonthlyIncomeByAccountIdAndType(
-            @Param("accountId") UUID accountId,
+    List<MonthlyFinanceDetails> findMonthlyAmountByUserIdAndType(
+            @Param("userId") UUID userId,
             @Param("type") TransactionType type
     );
 }

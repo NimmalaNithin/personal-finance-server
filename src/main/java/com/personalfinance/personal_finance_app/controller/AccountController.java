@@ -14,11 +14,9 @@ import java.util.UUID;
 public class AccountController {
 
     private AccountService accountService;
-    private TransactionService transactionService;
 
-    public AccountController(AccountService accountService, TransactionService transactionService){
+    public AccountController(AccountService accountService){
         this.accountService = accountService;
-        this.transactionService = transactionService;
     }
 
     @PostMapping("/")
@@ -28,34 +26,34 @@ public class AccountController {
         return ResponseEntity.ok(savedAccount);
     }
 
-    @GetMapping("/{id}/income/current-month")
-    public ResponseEntity<CurrentMonthFinancialSummaryResponse> getCurrentMonthIncome(@PathVariable UUID id) {
-        return ResponseEntity.ok(accountService.getCurrentMonthFinanceSummary(id, TransactionType.INCOME));
+    @GetMapping("/income/current-month")
+    public ResponseEntity<CurrentMonthFinancialSummaryResponse> getCurrentMonthIncome() {
+        return ResponseEntity.ok(accountService.getCurrentMonthFinanceSummary(TransactionType.INCOME));
     }
 
-    @GetMapping("/{id}/income/monthly")
-    public ResponseEntity<MonthlyFinantialSummaryResponse> getMonthlyIncome(@PathVariable UUID id) {
-        return ResponseEntity.ok(accountService.getMonthlyFinanceSummary(id, TransactionType.INCOME));
+    @GetMapping("/income/monthly")
+    public ResponseEntity<MonthlyFinantialSummaryResponse> getMonthlyIncome() {
+        return ResponseEntity.ok(accountService.getMonthlyFinanceSummary(TransactionType.INCOME));
     }
 
-    @GetMapping("/{id}/expenses/current-month")
-    public ResponseEntity<CurrentMonthFinancialSummaryResponse> getCurrentMonthExpenses(@PathVariable UUID id) {
-        return ResponseEntity.ok(accountService.getCurrentMonthFinanceSummary(id, TransactionType.EXPENSE));
+    @GetMapping("/expenses/current-month")
+    public ResponseEntity<CurrentMonthFinancialSummaryResponse> getCurrentMonthExpenses() {
+        return ResponseEntity.ok(accountService.getCurrentMonthFinanceSummary(TransactionType.EXPENSE));
     }
 
-    @GetMapping("/{id}/expenses/monthly")
-    public ResponseEntity<MonthlyFinantialSummaryResponse> getMonthlyExpenses(@PathVariable UUID id) {
-        return ResponseEntity.ok(accountService.getMonthlyFinanceSummary(id, TransactionType.EXPENSE));
+    @GetMapping("/expenses/monthly")
+    public ResponseEntity<MonthlyFinantialSummaryResponse> getMonthlyExpenses() {
+        return ResponseEntity.ok(accountService.getMonthlyFinanceSummary(TransactionType.EXPENSE));
     }
 
-    @GetMapping("/{id}/savings/current-month")
-    public ResponseEntity<CurrentMonthFinancialSummaryResponse> getCurrentMonthSavings(@PathVariable UUID id) {
-        return ResponseEntity.ok(accountService.getCurrentMonthSavings(id));
+    @GetMapping("/savings/current-month")
+    public ResponseEntity<CurrentMonthFinancialSummaryResponse> getCurrentMonthSavings() {
+        return ResponseEntity.ok(accountService.getCurrentMonthSavings());
     }
 
-    @GetMapping("/{id}/savings/monthly")
-    public ResponseEntity<MonthlyFinantialSummaryResponse> getMonthlySavings(@PathVariable UUID id) {
-        return ResponseEntity.ok(accountService.getMonthlySavings(id));
+    @GetMapping("/savings/monthly")
+    public ResponseEntity<MonthlyFinantialSummaryResponse> getMonthlySavings() {
+        return ResponseEntity.ok(accountService.getMonthlySavings());
     }
 
     @GetMapping("/{id}/balance")

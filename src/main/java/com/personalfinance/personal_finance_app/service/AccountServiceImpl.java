@@ -47,18 +47,19 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public CurrentMonthFinancialSummaryResponse getCurrentMonthFinanceSummary(UUID accountId, TransactionType type) {
+    public CurrentMonthFinancialSummaryResponse getCurrentMonthFinanceSummary(TransactionType type) {
+        UUID userId = JwtTokenUtil.getUserId();
         LocalDate startDate = LocalDate.now().withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().withDayOfMonth(startDate.lengthOfMonth());
-        BigDecimal income = transactionRepository.findTotalAmountByAccountIdAndTypeAndTransactionDateBetween(
-                accountId,
+        BigDecimal income = transactionRepository.findTotalAmountByUserIdAndTypeAndTransactionDateBetween(
+                userId,
                 type,
                 startDate,
                 endDate
         );
 
         return new CurrentMonthFinancialSummaryResponse(
-                accountId,
+                userId,
                 income,
                 type,
                 startDate.format(DateTimeFormatter.ofPattern("MM-yyyy"))
@@ -66,18 +67,19 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public CurrentMonthFinancialSummaryResponse getCurrentMonthSavings(UUID accountId) {
+    public CurrentMonthFinancialSummaryResponse getCurrentMonthSavings() {
+        UUID userId = JwtTokenUtil.getUserId();
         LocalDate startDate = LocalDate.now().withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().withDayOfMonth(startDate.lengthOfMonth());
-        BigDecimal income = transactionRepository.findTotalAmountByAccountIdAndTypeAndTransactionDateBetween(
-                accountId,
+        BigDecimal income = transactionRepository.findTotalAmountByUserIdAndTypeAndTransactionDateBetween(
+                userId,
                 TransactionType.INCOME,
                 startDate,
                 endDate
         );
 
-        BigDecimal expense = transactionRepository.findTotalAmountByAccountIdAndTypeAndTransactionDateBetween(
-                accountId,
+        BigDecimal expense = transactionRepository.findTotalAmountByUserIdAndTypeAndTransactionDateBetween(
+                userId,
                 TransactionType.EXPENSE,
                 startDate,
                 endDate
@@ -85,7 +87,7 @@ public class AccountServiceImpl implements AccountService{
 
 
         return new CurrentMonthFinancialSummaryResponse(
-                accountId,
+                userId,
                 income.subtract(expense),
                 null,
                 startDate.format(DateTimeFormatter.ofPattern("MM-yyyy"))
@@ -103,24 +105,26 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public MonthlyFinantialSummaryResponse getMonthlyFinanceSummary(UUID accountId, TransactionType transactionType) {
+    public MonthlyFinantialSummaryResponse getMonthlyFinanceSummary(TransactionType transactionType) {
+        UUID userId = JwtTokenUtil.getUserId();
         List<MonthlyFinanceDetails> monthlyFinances = transactionRepository.
-                findMonthlyIncomeByAccountIdAndType(accountId, transactionType);
-        return new MonthlyFinantialSummaryResponse(accountId, transactionType, monthlyFinances);
+                findMonthlyAmountByUserIdAndType(userId, transactionType);
+        return new MonthlyFinantialSummaryResponse(userId, transactionType, monthlyFinances);
     }
 
     @Override
-    public MonthlyFinantialSummaryResponse getMonthlySavings(UUID accountId) {
+    public MonthlyFinantialSummaryResponse getMonthlySavings() {
+        UUID userId = JwtTokenUtil.getUserId();
         List<MonthlyFinanceDetails> monthlyIncomes = transactionRepository.
-                findMonthlyIncomeByAccountIdAndType(accountId, TransactionType.INCOME);
+                findMonthlyAmountByUserIdAndType(userId, TransactionType.INCOME);
 
         List<MonthlyFinanceDetails> monthlyExpenses = transactionRepository.
-                findMonthlyIncomeByAccountIdAndType(accountId, TransactionType.EXPENSE);
+                findMonthlyAmountByUserIdAndType(userId, TransactionType.EXPENSE);
 
         List<MonthlyFinanceDetails> monthlySavings = TransactionUtil.getMonthlyExpenses(
                 monthlyIncomes,
                 monthlyExpenses
         );
-        return new MonthlyFinantialSummaryResponse(accountId, null, monthlySavings);
+        return new MonthlyFinantialSummaryResponse(userId, null, monthlySavings);
     }
 }

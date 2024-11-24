@@ -14,5 +14,5 @@ import java.util.UUID;
 public class MonthlyFinantialSummaryResponse {
     private UUID userId;
     private TransactionType type;
-    private List<MonthlyFinanceDetails> monthlyAmountDetails;
+    private List<MonthlyFinanceDetails> monthlyIncomeDetails;
 }

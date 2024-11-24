@@ -9,13 +9,13 @@ import java.util.UUID;
 public interface AccountService {
     AccountCreationResponse createUser(AccountCreationRequest accountCreationRequest);
 
-    CurrentMonthFinancialSummaryResponse getCurrentMonthFinanceSummary(UUID accountId, TransactionType type);
+    CurrentMonthFinancialSummaryResponse getCurrentMonthFinanceSummary(TransactionType type);
 
-    CurrentMonthFinancialSummaryResponse getCurrentMonthSavings(UUID accountId);
+    CurrentMonthFinancialSummaryResponse getCurrentMonthSavings();
 
     AccountBalanceResponse getAccountBalance(UUID accountId);
 
-    MonthlyFinantialSummaryResponse getMonthlyFinanceSummary(UUID accountId, TransactionType transactionType);
+    MonthlyFinantialSummaryResponse getMonthlyFinanceSummary(TransactionType transactionType);
 
-    MonthlyFinantialSummaryResponse getMonthlySavings(UUID accountId);
+    MonthlyFinantialSummaryResponse getMonthlySavings();
 }
