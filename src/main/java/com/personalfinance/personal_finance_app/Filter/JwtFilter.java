@@ -58,6 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 } else {
                     throw new Exception("Invalid token");
                 }
+
             } catch(Exception e){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Authentication failed: " + e.getMessage());

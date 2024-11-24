@@ -18,6 +18,16 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> getTransactions(@RequestParam(required=false) Integer page,
+                                             @RequestParam(required=false, defaultValue = "10" ) Integer size) {
+
+        return ResponseEntity.ok(page==null
+                ? transactionService.getTransactions()
+                : transactionService.getPaginatedTransactions( page, size)
+        );
+    }
+
     @PostMapping("/")
     public ResponseEntity<TransactionSummaryResponse> createTransaction(
             @RequestBody TransactionRequest transactionRequest) {

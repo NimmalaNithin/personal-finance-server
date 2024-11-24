@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
-    List<Transaction> findByAccountIdOrderByTransactionDate(UUID accountId);
+    List<Transaction> findByAccount_User_IdOrderByTransactionDate(UUID accountId);
 
-    Page<Transaction> findByAccountId(UUID accountId, Pageable pageable);
+    Page<Transaction> findByAccount_User_Id(UUID userId, Pageable pageable);
 
     @Query("SELECT SUM(t.amount) " +
             "FROM Transaction t " +

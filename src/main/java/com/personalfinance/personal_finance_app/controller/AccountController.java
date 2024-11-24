@@ -28,16 +28,6 @@ public class AccountController {
         return ResponseEntity.ok(savedAccount);
     }
 
-    @GetMapping("/{id}/transactions")
-    public ResponseEntity<?> getTransactions(@PathVariable UUID id,
-                                             @RequestParam(required=false) Integer page,
-                                             @RequestParam(required=false, defaultValue = "10" ) Integer size) {
-         return ResponseEntity.ok(page==null
-                ? transactionService.getTransactions(id)
-                : transactionService.getPaginatedTransactions(id, page, size)
-         );
-    }
-
     @GetMapping("/{id}/income/current-month")
     public ResponseEntity<CurrentMonthFinancialSummaryResponse> getCurrentMonthIncome(@PathVariable UUID id) {
         return ResponseEntity.ok(accountService.getCurrentMonthFinanceSummary(id, TransactionType.INCOME));

@@ -9,6 +9,7 @@ import com.personalfinance.personal_finance_app.model.entity.Transaction;
 import com.personalfinance.personal_finance_app.model.enums.TransactionType;
 import com.personalfinance.personal_finance_app.repository.AccountRepository;
 import com.personalfinance.personal_finance_app.repository.TransactionRepository;
+import com.personalfinance.personal_finance_app.util.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,8 +61,9 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public AccountTransactionsResponse getTransactions(UUID accountId) {
-        List<Transaction> transactions = transactionRepository.findByAccountIdOrderByTransactionDate(accountId);
+    public AccountTransactionsResponse getTransactions() {
+        UUID userId = JwtTokenUtil.getUserId();
+        List<Transaction> transactions = transactionRepository.findByAccount_User_IdOrderByTransactionDate(userId);
         List<TransactionSummaryResponse> transactionSummaryResponses = transactions.stream()
                 .map(TransactionSummaryResponse::new)
                 .toList();
@@ -69,8 +71,9 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public PaginatedTransactionResponse getPaginatedTransactions(UUID accountId, Integer page, Integer size) {
-        Page<Transaction> transactionPage = transactionRepository.findByAccountId(accountId,
+    public PaginatedTransactionResponse getPaginatedTransactions( Integer page, Integer size) {
+        UUID userId = JwtTokenUtil.getUserId();
+        Page<Transaction> transactionPage = transactionRepository.findByAccount_User_Id(userId,
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "transactionDate")));
 
         List<TransactionSummaryResponse> transactionSummaries = transactionPage.getContent().stream()

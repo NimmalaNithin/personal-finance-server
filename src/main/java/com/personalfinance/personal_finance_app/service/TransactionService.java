@@ -10,9 +10,9 @@ import java.util.UUID;
 public interface TransactionService {
     TransactionSummaryResponse createTransaction(TransactionRequest transactionRequest);
 
-    AccountTransactionsResponse getTransactions(UUID accountId);
+    AccountTransactionsResponse getTransactions();
 
-    PaginatedTransactionResponse getPaginatedTransactions(UUID accountId, Integer page, Integer size);
+    PaginatedTransactionResponse getPaginatedTransactions( Integer page, Integer size);
 
     void deleteTransaction(UUID transactionId);
 
